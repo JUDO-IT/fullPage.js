@@ -553,7 +553,7 @@
                             //scrolling the page to the section with no animation
                             $htmlBody.scrollTop(section.position().top);
                         }
-						 $.isFunction(options.beforeLoad) && options.beforeLoad.call(section, destiny, (section.index(SECTION_SEL) + 1));
+			$.isFunction(options.beforeLoad) && options.beforeLoad.call(section, destiny, (section.index(SECTION_SEL) + 1));
 						 
                         activateMenuAndNav(destiny, null);
 
@@ -1082,7 +1082,7 @@
         function performMovement(v){
             // using CSS3 translate functionality
             if (options.css3 && options.autoScrolling && !options.scrollBar) {
-				beforeSectionLoads(v);
+		beforeSectionLoads(v);
 				
                 var translate3d = 'translate3d(0px, -' + v.dtop + 'px, 0px)';
                 transformContainer(translate3d, true);
@@ -1096,7 +1096,7 @@
             else{
                 var scrollSettings = getScrollSettings(v);
 				
-				beforeSectionLoads(v);
+		beforeSectionLoads(v);
                 $(scrollSettings.element).animate(
                     scrollSettings.options,
                 options.scrollingSpeed, options.easing).promise().done(function () { //only one single callback in case of animating  `html, body`
@@ -1176,7 +1176,7 @@
             keepSlidesPosition();
         }
 
-		/**
+	/**
         * Actions to do once the section is going to load
         */
         function beforeSectionLoads (v){
@@ -1576,15 +1576,15 @@
          */
         function activateMenuElement(name){
             if(options.menu){
-				var activatedBefore = $(options.menu).find(ACTIVE_SEL);
-				var classList = activatedBefore.attr('class');
-				var newClassList = classList ? classList.replace(ACTIVE, '') : '';
-				activatedBefore.attr('class', newClassList);
+		var activatedBefore = $(options.menu).find(ACTIVE_SEL);
+		var classList = activatedBefore.attr('class');
+		var newClassList = classList ? classList.replace(ACTIVE, '') : '';
+		activatedBefore.attr('class', newClassList);
 				
                 var toBeActivated = $(options.menu).find('[data-menuanchor="'+name+'"]');
-				var classList = toBeActivated.attr('class');
-				var newClassList = (classList ? classList + ' ' : '') + ACTIVE;
-				toBeActivated.attr('class', newClassList);
+		var classList = toBeActivated.attr('class');
+		var newClassList = (classList ? classList + ' ' : '') + ACTIVE;
+		toBeActivated.attr('class', newClassList);
             }
         }
 
