@@ -129,6 +129,7 @@
 
 
             //events
+            beforeLoad: null,
             afterLoad: null,
             onLeave: null,
             afterRender: null,
@@ -552,6 +553,8 @@
                             //scrolling the page to the section with no animation
                             $htmlBody.scrollTop(section.position().top);
                         }
+						 $.isFunction(options.beforeLoad) && options.beforeLoad.call(section, destiny, (section.index(SECTION_SEL) + 1));
+						 
                         activateMenuAndNav(destiny, null);
 
                         $.isFunction( options.afterLoad ) && options.afterLoad.call( section, destiny, (section.index(SECTION_SEL) + 1));
@@ -1079,7 +1082,8 @@
         function performMovement(v){
             // using CSS3 translate functionality
             if (options.css3 && options.autoScrolling && !options.scrollBar) {
-
+				beforeSectionLoads(v);
+				
                 var translate3d = 'translate3d(0px, -' + v.dtop + 'px, 0px)';
                 transformContainer(translate3d, true);
 
@@ -1091,7 +1095,8 @@
             // using jQuery animate
             else{
                 var scrollSettings = getScrollSettings(v);
-
+				
+				beforeSectionLoads(v);
                 $(scrollSettings.element).animate(
                     scrollSettings.options,
                 options.scrollingSpeed, options.easing).promise().done(function () { //only one single callback in case of animating  `html, body`
@@ -1171,7 +1176,14 @@
             keepSlidesPosition();
         }
 
-
+		/**
+        * Actions to do once the section is going to load
+        */
+        function beforeSectionLoads (v){
+            //callback (beforeLoad) if the site is not just resizing and readjusting the slides
+            $.isFunction(options.beforeLoad) && !v.localIsResizing && options.beforeLoad.call(v.element, v.anchorLink, (v.sectionIndex + 1));
+        }
+		
         /**
         * Actions to do once the section is loaded
         */
@@ -1564,8 +1576,15 @@
          */
         function activateMenuElement(name){
             if(options.menu){
-                $(options.menu).find(ACTIVE_SEL).removeClass(ACTIVE);
-                $(options.menu).find('[data-menuanchor="'+name+'"]').addClass(ACTIVE);
+				var activatedBefore = $(options.menu).find(ACTIVE_SEL);
+				var classList = activatedBefore.attr('class');
+				var newClassList = classList ? classList.replace(ACTIVE, '') : '';
+				activatedBefore.attr('class', newClassList);
+				
+                var toBeActivated = $(options.menu).find('[data-menuanchor="'+name+'"]');
+				var classList = toBeActivated.attr('class');
+				var newClassList = (classList ? classList + ' ' : '') + ACTIVE;
+				toBeActivated.attr('class', newClassList);
             }
         }
 
